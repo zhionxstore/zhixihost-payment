@@ -162,7 +162,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Getaway Payment</h1>
+        <h1>Zhixi HostPayment</h1>
         
         <div class="progress-steps">
             <div class="step active" id="step1">
@@ -175,7 +175,7 @@
             </div>
             <div class="step" id="step3">
                 <div class="step-number">3</div>
-                <div>Selesai</div>
+                <div>Struk</div>
             </div>
         </div>
         
@@ -183,11 +183,6 @@
             <div class="form-group">
                 <label for="nama">Nama Lengkap</label>
                 <input type="text" id="nama" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" required>
             </div>
             
             <div class="form-group">
@@ -223,18 +218,12 @@
                     <input type="radio" name="paymentMethod" id="ewallet" value="ewallet">
                     <label for="ewallet">E-Wallet</label>
                 </div>
-                
-                <div class="payment-option">
-                    <input type="radio" name="paymentMethod" id="kartu" value="kartu">
-                    <label for="kartu">Kartu Kredit/Debit</label>
-                </div>
-            </div>
             
             <div id="transferDetails" class="payment-details">
                 <h3>Transfer Bank</h3>
                 <p>Silakan transfer ke rekening berikut:</p>
-                <p><strong>Bank:</strong> BCA</p>
-                <p><strong>Nomor Rekening:</strong> 1234567890</p>
+                <p><strong>Bank:</strong> Jago Syariah</p>
+                <p><strong>Nomor Rekening:</strong> 506867277058</p>
                 <p><strong>Atas Nama:</strong> Getaway Travel</p>
                 <p><strong>Jumlah:</strong> <span id="transferAmount"></span></p>
             </div>
@@ -246,31 +235,9 @@
                     [QR Code Placeholder]
                 </div>
                 <p>Atau transfer ke:</p>
-                <p><strong>DANA/OVO/GoPay:</strong> 081234567890</p>
+                <p><strong>DANA/GoPay:</strong> 083152956458</p>
+                <p></p>strong>OVO:</strong> 082122789671</p>
                 <p><strong>Jumlah:</strong> <span id="ewalletAmount"></span></p>
-            </div>
-            
-            <div id="kartuDetails" class="payment-details">
-                <h3>Kartu Kredit/Debit</h3>
-                <div class="form-group">
-                    <label for="cardNumber">Nomor Kartu</label>
-                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
-                </div>
-                <div class="form-group">
-                    <label for="cardName">Nama di Kartu</label>
-                    <input type="text" id="cardName" placeholder="Nama Pemilik Kartu">
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <div class="form-group" style="flex: 1;">
-                        <label for="cardExpiry">Masa Berlaku (MM/YY)</label>
-                        <input type="text" id="cardExpiry" placeholder="MM/YY">
-                    </div>
-                    <div class="form-group" style="flex: 1;">
-                        <label for="cardCvv">CVV</label>
-                        <input type="text" id="cardCvv" placeholder="123">
-                    </div>
-                </div>
-                <p><strong>Jumlah:</strong> <span id="cardAmount"></span></p>
             </div>
             
             <div class="form-group" style="margin-top: 20px;">
@@ -293,10 +260,6 @@
                 <div>
                     <span>Nama:</span>
                     <span id="receipt-nama"></span>
-                </div>
-                <div>
-                    <span>Email:</span>
-                    <span id="receipt-email"></span>
                 </div>
                 <div>
                     <span>No. Telepon:</span>
@@ -416,8 +379,6 @@
                     document.getElementById('transferDetails').style.display = 'block';
                 } else if (this.value === 'ewallet') {
                     document.getElementById('ewalletDetails').style.display = 'block';
-                } else if (this.value === 'kartu') {
-                    document.getElementById('kartuDetails').style.display = 'block';
                 }
             });
         });
@@ -488,7 +449,6 @@
             
             // Isi struk
             document.getElementById('receipt-nama').textContent = nama;
-            document.getElementById('receipt-email').textContent = email;
             document.getElementById('receipt-telp').textContent = telp;
             document.getElementById('receipt-paket').textContent = namaPaket;
             document.getElementById('receipt-harga').textContent = formatRupiah(harga);
@@ -526,7 +486,7 @@
             const total = document.getElementById('receipt-total').textContent;
             
             // Buat pesan WhatsApp
-            const message = `*Struk Pembayaran Getaway*\n\n` +
+            const message = `*Struk Pembayaran *\n\n` +
                            `Nama: ${nama}\n` +
                            `Email: ${email}\n` +
                            `No. Telepon: ${telp}\n` +
