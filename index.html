@@ -4,137 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Getaway Payment</title>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-            color: #333;
+            padding: 0;
+            color: #fff;
+        }
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .video-background video {
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            z-index: -1;
         }
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 500px;
+            margin: 20px auto;
+            background: rgba(0,0,0,0.7);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
         h1 {
-            color: #2c3e50;
+            color: #fff;
             text-align: center;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #2ecc71;
-        }
-        .payment-method {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-        }
-        .payment-option {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .payment-option:hover {
-            background-color: #f0f0f0;
-        }
-        .payment-option input {
-            width: auto;
-            margin-right: 10px;
-        }
-        .payment-details {
-            display: none;
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #f0f8ff;
-            border-radius: 5px;
-        }
-        .receipt {
-            margin-top: 30px;
-            padding: 20px;
-            border: 1px dashed #ccc;
-            border-radius: 4px;
-            display: none;
-        }
-        .receipt-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .receipt-details {
-            margin-bottom: 20px;
-        }
-        .receipt-details div {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        .total {
-            font-weight: bold;
-            font-size: 18px;
-            border-top: 1px solid #333;
-            padding-top: 10px;
-        }
-        .send-btn {
-            margin-top: 15px;
-            background-color: #3498db;
-        }
-        .send-btn:hover {
-            background-color: #2980b9;
+            margin-bottom: 25px;
         }
         .progress-steps {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #444;
         }
         .step {
             text-align: center;
             flex: 1;
             position: relative;
+            color: #fff;
         }
         .step-number {
             width: 30px;
             height: 30px;
-            background-color: #ddd;
+            background-color: #555;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 5px;
+            color: white;
         }
         .step.active .step-number {
             background-color: #27ae60;
@@ -144,25 +81,125 @@
             background-color: #2ecc71;
             color: white;
         }
-        .step:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            top: 15px;
-            left: 60%;
-            width: 80%;
-            height: 2px;
-            background-color: #ddd;
-            z-index: -1;
+        .form-group {
+            margin-bottom: 20px;
         }
-        .step.active:not(:last-child)::after,
-        .step.completed:not(:last-child)::after {
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #fff;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            background: rgba(255,255,255,0.9);
+        }
+        button {
             background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 14px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #2ecc71;
+        }
+        .payment-method {
+            margin-top: 20px;
+            display: none;
+        }
+        .payment-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 12px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.1);
+        }
+        .payment-option:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        .payment-option input {
+            width: auto;
+            margin-right: 10px;
+        }
+        .payment-option label {
+            margin-bottom: 0;
+            color: #fff;
+        }
+        .payment-details {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: rgba(0,100,200,0.2);
+            border-radius: 5px;
+            color: #fff;
+        }
+        #qrcode {
+            width: 180px;
+            height: 180px;
+            margin: 15px auto;
+            padding: 10px;
+            background: white;
+        }
+        .receipt {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            display: none;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        .receipt div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #444;
+        }
+        .receipt-label {
+            font-weight: bold;
+            color: #ddd;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+            border-top: 2px dashed #2ecc71;
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+        .send-btn {
+            background-color: #3498db;
+            margin-top: 20px;
+        }
+        .send-btn:hover {
+            background-color: #2980b9;
         }
     </style>
 </head>
 <body>
+    <div class="video-background">
+        <video autoplay muted loop>
+            <source src="background.mp4" type="video/mp4">
+        </video>
+    </div>
+    <div class="overlay"></div>
+    
     <div class="container">
-        <h1>Zhixi HostPayment</h1>
+        <h1>Getaway Payment</h1>
         
         <div class="progress-steps">
             <div class="step active" id="step1">
@@ -175,7 +212,7 @@
             </div>
             <div class="step" id="step3">
                 <div class="step-number">3</div>
-                <div>Struk</div>
+                <div>Selesai</div>
             </div>
         </div>
         
@@ -186,57 +223,44 @@
             </div>
             
             <div class="form-group">
-                <label for="telp">Nomor Telepon</label>
+                <label for="telp">Nomor WhatsApp</label>
                 <input type="tel" id="telp" required>
             </div>
             
             <div class="form-group">
-                <label for="paket">Pilih Paket Getaway</label>
-                <select id="paket" required>
-                    <option value="">-- Pilih Paket --</option>
-                    <option value="basic">Paket Basic - Rp 500.000</option>
-                    <option value="standard">Paket Standard - Rp 1.000.000</option>
-                    <option value="premium">Paket Premium - Rp 2.000.000</option>
-                    <option value="vip">Paket VIP - Rp 3.500.000</option>
-                </select>
+                <label for="nominal">Nominal Pembayaran</label>
+                <input type="number" id="nominal" required>
             </div>
             
             <button type="submit">Lanjut ke Pembayaran</button>
         </form>
         
-        <div id="paymentSection" style="display: none;">
-            <h2>Metode Pembayaran</h2>
-            <div class="form-group">
-                <label>Pilih Metode Pembayaran:</label>
-                
-                <div class="payment-option">
-                    <input type="radio" name="paymentMethod" id="transfer" value="transfer" checked>
-                    <label for="transfer">Transfer Bank</label>
-                </div>
-                
-                <div class="payment-option">
-                    <input type="radio" name="paymentMethod" id="ewallet" value="ewallet">
-                    <label for="ewallet">E-Wallet</label>
-                </div>
+        <div id="paymentSection" class="payment-method">
+            <h3>Metode Pembayaran</h3>
+            
+            <div class="payment-option">
+                <input type="radio" name="paymentMethod" id="transfer" value="transfer" checked>
+                <label for="transfer">Transfer Bank</label>
+            </div>
             
             <div id="transferDetails" class="payment-details">
-                <h3>Transfer Bank</h3>
                 <p>Silakan transfer ke rekening berikut:</p>
-                <p><strong>Bank:</strong> Jago Syariah</p>
-                <p><strong>Nomor Rekening:</strong> 506867277058</p>
+                <p><strong>Bank:</strong> BCA</p>
+                <p><strong>Nomor Rekening:</strong> 1234567890</p>
                 <p><strong>Atas Nama:</strong> Getaway Travel</p>
                 <p><strong>Jumlah:</strong> <span id="transferAmount"></span></p>
             </div>
             
+            <div class="payment-option">
+                <input type="radio" name="paymentMethod" id="ewallet" value="ewallet">
+                <label for="ewallet">E-Wallet</label>
+            </div>
+            
             <div id="ewalletDetails" class="payment-details">
-                <h3>E-Wallet</h3>
                 <p>Silakan bayar menggunakan QRIS berikut:</p>
-                <div style="background: #eee; padding: 20px; text-align: center; margin: 15px 0;">
-                    [https://tmpfiles.org/dl/23938812/bmmhpctgyp.jpeg]
-                </div>
+                <div id="qrcode"></div>
                 <p>Atau transfer ke:</p>
-                <p><strong>DANA/GoPay:</strong> 083152956458</p>
-                <p><strong>OVO:</strong> 082122789671</p>
+                <p><strong>DANA/OVO/GoPay:</strong> 081234567890</p>
                 <p><strong>Jumlah:</strong> <span id="ewalletAmount"></span></p>
             </div>
             
@@ -250,45 +274,33 @@
         </div>
         
         <div id="receipt" class="receipt">
-            <div class="receipt-header">
-                <h2>Struk Pembayaran</h2>
-                <p id="receipt-date"></p>
-                <p style="color: #27ae60; font-weight: bold;">Pembayaran Berhasil!</p>
+            <h3 style="text-align: center; color: #2ecc71;">Struk Pembayaran Getaway</h3>
+            <div>
+                <span class="receipt-label">Nama:</span>
+                <span id="receipt-nama"></span>
+            </div>
+            <div>
+                <span class="receipt-label">No. Telepon:</span>
+                <span id="receipt-telp"></span>
+            </div>
+            <div>
+                <span class="receipt-label">Nominal:</span>
+                <span id="receipt-nominal"></span>
+            </div>
+            <div>
+                <span class="receipt-label">Metode Pembayaran:</span>
+                <span id="receipt-metode"></span>
+            </div>
+            <div>
+                <span class="receipt-label">Tanggal:</span>
+                <span id="receipt-tanggal"></span>
+            </div>
+            <div class="total">
+                <span>TOTAL:</span>
+                <span id="receipt-total"></span>
             </div>
             
-            <div class="receipt-details">
-                <div>
-                    <span>Nama:</span>
-                    <span id="receipt-nama"></span>
-                </div>
-                <div>
-                    <span>No. Telepon:</span>
-                    <span id="receipt-telp"></span>
-                </div>
-                <div>
-                    <span>Paket:</span>
-                    <span id="receipt-paket"></span>
-                </div>
-                <div>
-                    <span>Harga:</span>
-                    <span id="receipt-harga"></span>
-                </div>
-                <div>
-                    <span>Metode Pembayaran:</span>
-                    <span id="receipt-metode"></span>
-                </div>
-                <div>
-                    <span>Tanggal:</span>
-                    <span id="receipt-tanggal"></span>
-                </div>
-                <div class="total">
-                    <span>Total:</span>
-                    <span id="receipt-total"></span>
-                </div>
-            </div>
-            
-            <button id="sendBtn" class="send-btn">Kirim Struk ke WhatsApp</button>
-            <button id="newPaymentBtn" style="margin-top: 10px;">Pembayaran Baru</button>
+            <button id="sendBtn" class="send-btn">Kirim ke WhatsApp</button>
         </div>
     </div>
 
@@ -298,10 +310,10 @@
             return new Intl.NumberFormat('id-ID', {
                 style: 'currency',
                 currency: 'IDR'
-            }).format(number).replace(/\D00(?=\D*$)/, '');
+            }).format(number);
         };
         
-        // Dapatkan tanggal sekarang
+        // Dapatkan tanggal lengkap
         const getCurrentDate = () => {
             const now = new Date();
             const options = { 
@@ -315,52 +327,59 @@
             return now.toLocaleDateString('id-ID', options);
         };
         
+        // Generate QR Code
+        function generateQRCode(amount) {
+            document.getElementById('qrcode').innerHTML = '';
+            
+            const paymentData = {
+                merchant: 'Getaway Travel',
+                account: '081234567890',
+                amount: amount,
+                note: 'Pembayaran Getaway'
+            };
+            
+            new QRCode(document.getElementById('qrcode'), {
+                text: JSON.stringify(paymentData),
+                width: 180,
+                height: 180,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+        
         // Proses form informasi
         document.getElementById('infoForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Validasi paket dipilih
-            const paket = document.getElementById('paket').value;
-            if (!paket) {
-                alert('Silakan pilih paket getaway');
+            const nominal = document.getElementById('nominal').value;
+            if (!nominal || nominal <= 0) {
+                alert('Masukkan nominal yang valid');
                 return;
             }
             
-            // Tampilkan section pembayaran
             document.getElementById('infoForm').style.display = 'none';
             document.getElementById('paymentSection').style.display = 'block';
             
-            // Update progress steps
             document.getElementById('step1').classList.remove('active');
             document.getElementById('step1').classList.add('completed');
             document.getElementById('step2').classList.add('active');
             
-            // Tentukan harga berdasarkan paket
-            let harga = 0;
-            switch(paket) {
-                case 'basic': harga = 500000; break;
-                case 'standard': harga = 1000000; break;
-                case 'premium': harga = 2000000; break;
-                case 'vip': harga = 3500000; break;
-            }
+            const amount = parseInt(nominal);
             
-            // Update jumlah pembayaran di semua metode
-            document.getElementById('transferAmount').textContent = formatRupiah(harga);
-            document.getElementById('ewalletAmount').textContent = formatRupiah(harga);
-            document.getElementById('cardAmount').textContent = formatRupiah(harga);
+            document.getElementById('transferAmount').textContent = formatRupiah(amount);
+            document.getElementById('ewalletAmount').textContent = formatRupiah(amount);
             
-            // Tampilkan detail transfer sebagai default
+            generateQRCode(amount);
+            
             document.getElementById('transferDetails').style.display = 'block';
         });
         
         // Kembali ke form informasi
-        document.getElementById('backToInfoBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            
+        document.getElementById('backToInfoBtn').addEventListener('click', function() {
             document.getElementById('infoForm').style.display = 'block';
             document.getElementById('paymentSection').style.display = 'none';
             
-            // Update progress steps
             document.getElementById('step1').classList.add('active');
             document.getElementById('step1').classList.remove('completed');
             document.getElementById('step2').classList.remove('active');
@@ -369,12 +388,10 @@
         // Pilih metode pembayaran
         document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
             radio.addEventListener('change', function() {
-                // Sembunyikan semua detail pembayaran
                 document.querySelectorAll('.payment-details').forEach(detail => {
                     detail.style.display = 'none';
                 });
                 
-                // Tampilkan detail yang dipilih
                 if (this.value === 'transfer') {
                     document.getElementById('transferDetails').style.display = 'block';
                 } else if (this.value === 'ewallet') {
@@ -384,146 +401,51 @@
         });
         
         // Selesaikan pembayaran
-        document.getElementById('completePaymentBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Validasi konfirmasi pembayaran
+        document.getElementById('completePaymentBtn').addEventListener('click', function() {
             if (!document.getElementById('confirmPayment').checked) {
-                alert('Silakan konfirmasi bahwa Anda telah menyelesaikan pembayaran');
+                alert('Silakan konfirmasi pembayaran');
                 return;
             }
             
-            // Validasi kartu kredit jika metode kartu dipilih
-            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            if (paymentMethod === 'kartu') {
-                const cardNumber = document.getElementById('cardNumber').value;
-                const cardName = document.getElementById('cardName').value;
-                const cardExpiry = document.getElementById('cardExpiry').value;
-                const cardCvv = document.getElementById('cardCvv').value;
-                
-                if (!cardNumber || !cardName || !cardExpiry || !cardCvv) {
-                    alert('Silakan lengkapi informasi kartu kredit/debit');
-                    return;
-                }
-                
-                // Validasi sederhana format kartu
-                if (!/^\d{16}$/.test(cardNumber.replace(/\s/g, ''))) {
-                    alert('Nomor kartu tidak valid');
-                    return;
-                }
-                
-                if (!/^\d{3,4}$/.test(cardCvv)) {
-                    alert('CVV tidak valid');
-                    return;
-                }
-            }
-            
-            // Ambil nilai dari form
             const nama = document.getElementById('nama').value;
-            const email = document.getElementById('email').value;
             const telp = document.getElementById('telp').value;
-            const paket = document.getElementById('paket').value;
+            const nominal = document.getElementById('nominal').value;
+            const metode = document.querySelector('input[name="paymentMethod"]:checked').nextElementSibling.textContent;
             
-            // Tentukan harga dan nama paket
-            let harga = 0;
-            let namaPaket = '';
-            
-            switch(paket) {
-                case 'basic':
-                    harga = 500000;
-                    namaPaket = 'Paket Basic';
-                    break;
-                case 'standard':
-                    harga = 1000000;
-                    namaPaket = 'Paket Standard';
-                    break;
-                case 'premium':
-                    harga = 2000000;
-                    namaPaket = 'Paket Premium';
-                    break;
-                case 'vip':
-                    harga = 3500000;
-                    namaPaket = 'Paket VIP';
-                    break;
-            }
-            
-            // Isi struk
             document.getElementById('receipt-nama').textContent = nama;
             document.getElementById('receipt-telp').textContent = telp;
-            document.getElementById('receipt-paket').textContent = namaPaket;
-            document.getElementById('receipt-harga').textContent = formatRupiah(harga);
-            document.getElementById('receipt-metode').textContent = document.querySelector('input[name="paymentMethod"]:checked').nextElementSibling.textContent;
+            document.getElementById('receipt-nominal').textContent = formatRupiah(nominal);
+            document.getElementById('receipt-metode').textContent = metode;
             document.getElementById('receipt-tanggal').textContent = getCurrentDate();
-            document.getElementById('receipt-total').textContent = formatRupiah(harga);
-            document.getElementById('receipt-date').textContent = getCurrentDate();
+            document.getElementById('receipt-total').textContent = formatRupiah(nominal);
             
-            // Tampilkan struk dan sembunyikan form pembayaran
             document.getElementById('paymentSection').style.display = 'none';
             document.getElementById('receipt').style.display = 'block';
             
-            // Update progress steps
             document.getElementById('step2').classList.remove('active');
             document.getElementById('step2').classList.add('completed');
             document.getElementById('step3').classList.add('active');
-            
-            // Scroll ke struk
-            document.getElementById('receipt').scrollIntoView({ behavior: 'smooth' });
         });
         
-        // Kirim struk ke WhatsApp
+        // Kirim ke WhatsApp
         document.getElementById('sendBtn').addEventListener('click', function() {
-            // Nomor WhatsApp tujuan
-            const phoneNumber = '6282133137493';
-            
-            // Ambil data dari struk
+            const phone = document.getElementById('telp').value.replace(/^0/, '62');
             const nama = document.getElementById('receipt-nama').textContent;
-            const email = document.getElementById('receipt-email').textContent;
             const telp = document.getElementById('receipt-telp').textContent;
-            const paket = document.getElementById('receipt-paket').textContent;
-            const harga = document.getElementById('receipt-harga').textContent;
+            const nominal = document.getElementById('receipt-nominal').textContent;
             const metode = document.getElementById('receipt-metode').textContent;
             const tanggal = document.getElementById('receipt-tanggal').textContent;
-            const total = document.getElementById('receipt-total').textContent;
             
-            // Buat pesan WhatsApp
-            const message = `*Struk Pembayaran *\n\n` +
-                           `Nama: ${nama}\n` +
-                           `Email: ${email}\n` +
-                           `No. Telepon: ${telp}\n` +
-                           `Paket: ${paket}\n` +
-                           `Harga: ${harga}\n` +
-                           `Metode Pembayaran: ${metode}\n` +
-                           `Tanggal: ${tanggal}\n` +
-                           `Total: ${total}\n\n` +
+            const message = `*Struk Pembayaran Getaway*%0A%0A` +
+                           `Nama: ${nama}%0A` +
+                           `No. Telepon: ${telp}%0A` +
+                           `Nominal: ${nominal}%0A` +
+                           `Metode Pembayaran: ${metode}%0A` +
+                           `Tanggal: ${tanggal}%0A%0A` +
                            `Terima kasih atas pembayaran Anda!`;
             
-            // Encode pesan untuk URL
-            const encodedMessage = encodeURIComponent(message);
-            
-            // Buat link WhatsApp
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-            
-            // Buka WhatsApp
-            window.open(whatsappUrl, '_blank');
-        });
-        
-        // Pembayaran baru
-        document.getElementById('newPaymentBtn').addEventListener('click', function() {
-            // Reset form
-            document.getElementById('infoForm').reset();
-            document.getElementById('infoForm').style.display = 'block';
-            document.getElementById('receipt').style.display = 'none';
-            
-            // Reset progress steps
-            document.getElementById('step1').classList.add('active');
-            document.getElementById('step1').classList.remove('completed');
-            document.getElementById('step2').classList.remove('active');
-            document.getElementById('step2').classList.remove('completed');
-            document.getElementById('step3').classList.remove('active');
-            
-            // Scroll ke atas
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
         });
     </script>
 </body>
-</html>
+            </html>
