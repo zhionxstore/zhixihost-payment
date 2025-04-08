@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Getaway Payment</title>
+    <title>Zhixihost Payment</title>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <style>
         body {
@@ -48,38 +48,6 @@
             color: #fff;
             text-align: center;
             margin-bottom: 25px;
-        }
-        .progress-steps {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #444;
-        }
-        .step {
-            text-align: center;
-            flex: 1;
-            position: relative;
-            color: #fff;
-        }
-        .step-number {
-            width: 30px;
-            height: 30px;
-            background-color: #555;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 5px;
-            color: white;
-        }
-        .step.active .step-number {
-            background-color: #27ae60;
-            color: white;
-        }
-        .step.completed .step-number {
-            background-color: #2ecc71;
-            color: white;
         }
         .form-group {
             margin-bottom: 20px;
@@ -199,22 +167,7 @@
     <div class="overlay"></div>
     
     <div class="container">
-        <h1>Getaway Payment</h1>
-        
-        <div class="progress-steps">
-            <div class="step active" id="step1">
-                <div class="step-number">1</div>
-                <div>Informasi</div>
-            </div>
-            <div class="step" id="step2">
-                <div class="step-number">2</div>
-                <div>Pembayaran</div>
-            </div>
-            <div class="step" id="step3">
-                <div class="step-number">3</div>
-                <div>Selesai</div>
-            </div>
-        </div>
+        <h1>Zhixihost Payment</h1>
         
         <form id="infoForm">
             <div class="form-group">
@@ -245,9 +198,9 @@
             
             <div id="transferDetails" class="payment-details">
                 <p>Silakan transfer ke rekening berikut:</p>
-                <p><strong>Bank:</strong> BCA</p>
-                <p><strong>Nomor Rekening:</strong> 1234567890</p>
-                <p><strong>Atas Nama:</strong> Getaway Travel</p>
+                <p><strong>Bank:</strong> Jago</p>
+                <p><strong>Nomor Rekening:</strong> 506867277058</p>
+                <p><strong>Atas Nama:</strong> Ammar Dzakir A</p>
                 <p><strong>Jumlah:</strong> <span id="transferAmount"></span></p>
             </div>
             
@@ -260,7 +213,8 @@
                 <p>Silakan bayar menggunakan QRIS berikut:</p>
                 <div id="qrcode"></div>
                 <p>Atau transfer ke:</p>
-                <p><strong>DANA/OVO/GoPay:</strong> 081234567890</p>
+                <p><strong>DANA/GoPay:</strong> 083152956458</p>
+                <p><strong>OVO:</strong> 082122789671</p>
                 <p><strong>Jumlah:</strong> <span id="ewalletAmount"></span></p>
             </div>
             
@@ -300,7 +254,7 @@
                 <span id="receipt-total"></span>
             </div>
             
-            <button id="sendBtn" class="send-btn">Kirim ke WhatsApp</button>
+            <button id="sendBtn" class="send-btn">Kirim ke WhatsApp Sertakan Bukti Transfer</button>
         </div>
     </div>
 
@@ -332,10 +286,10 @@
             document.getElementById('qrcode').innerHTML = '';
             
             const paymentData = {
-                merchant: 'Getaway Travel',
-                account: '081234567890',
+                merchant: 'ZHIXI STORE OFFC',
+                account: '0882002293167',
                 amount: amount,
-                note: 'Pembayaran Getaway'
+                note: 'Payment'
             };
             
             new QRCode(document.getElementById('qrcode'), {
@@ -361,10 +315,6 @@
             document.getElementById('infoForm').style.display = 'none';
             document.getElementById('paymentSection').style.display = 'block';
             
-            document.getElementById('step1').classList.remove('active');
-            document.getElementById('step1').classList.add('completed');
-            document.getElementById('step2').classList.add('active');
-            
             const amount = parseInt(nominal);
             
             document.getElementById('transferAmount').textContent = formatRupiah(amount);
@@ -379,10 +329,6 @@
         document.getElementById('backToInfoBtn').addEventListener('click', function() {
             document.getElementById('infoForm').style.display = 'block';
             document.getElementById('paymentSection').style.display = 'none';
-            
-            document.getElementById('step1').classList.add('active');
-            document.getElementById('step1').classList.remove('completed');
-            document.getElementById('step2').classList.remove('active');
         });
         
         // Pilih metode pembayaran
@@ -421,13 +367,9 @@
             
             document.getElementById('paymentSection').style.display = 'none';
             document.getElementById('receipt').style.display = 'block';
-            
-            document.getElementById('step2').classList.remove('active');
-            document.getElementById('step2').classList.add('completed');
-            document.getElementById('step3').classList.add('active');
         });
         
-        // Kirim ke WhatsApp
+        // Kirim ke WhatsApp 
         document.getElementById('sendBtn').addEventListener('click', function() {
             const phone = document.getElementById('telp').value.replace(/^0/, '62');
             const nama = document.getElementById('receipt-nama').textContent;
